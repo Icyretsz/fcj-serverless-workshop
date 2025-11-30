@@ -103,7 +103,7 @@ const HomePage: React.FC = () => {
 
     const handleDelete = async (userId: number) => {
         if (!user?.id_token) return;
-        
+
         if (!confirm('Are you sure you want to delete this user?')) return;
 
         const response = await apiClient.deleteUser(`/users`, userId.toString(), user.id_token);
@@ -145,83 +145,83 @@ const HomePage: React.FC = () => {
             {users && (
                 <div style={{ marginTop: '20px' }}>
                     <h2>Users Management</h2>
-                    
-                    <table style={{ 
-                        width: '100%', 
-                        borderCollapse: 'collapse', 
+
+                    <table style={{
+                        width: '100%',
+                        borderCollapse: 'collapse',
                         marginTop: '20px',
                         border: '1px solid #ddd'
                     }}>
                         <thead>
-                            <tr style={{ backgroundColor: '#f2f2f2' }}>
-                                <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>ID</th>
-                                <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Username</th>
-                                <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Email</th>
-                                <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Role</th>
-                                <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Phone</th>
-                                <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Actions</th>
-                            </tr>
+                        <tr style={{ backgroundColor: '#f2f2f2' }}>
+                            <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>ID</th>
+                            <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Username</th>
+                            <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Email</th>
+                            <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Role</th>
+                            <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Phone</th>
+                            <th style={{ padding: '12px', border: '1px solid #ddd', textAlign: 'left' }}>Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {users.map((u) => (
-                                <tr key={u.id}>
-                                    <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.id}</td>
-                                    <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.username}</td>
-                                    <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.email}</td>
-                                    <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.role}</td>
-                                    <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.phone_number}</td>
-                                    <td style={{ padding: '12px', border: '1px solid #ddd' }}>
-                                        <button 
-                                            onClick={() => handleGetDetails(u.id)}
-                                            style={{ 
-                                                marginRight: '5px', 
-                                                padding: '5px 10px',
-                                                cursor: 'pointer',
-                                                backgroundColor: '#4CAF50',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '3px'
-                                            }}
-                                        >
-                                            Details
-                                        </button>
-                                        <button 
-                                            onClick={() => handleEdit(u)}
-                                            style={{ 
-                                                marginRight: '5px', 
-                                                padding: '5px 10px',
-                                                cursor: 'pointer',
-                                                backgroundColor: '#2196F3',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '3px'
-                                            }}
-                                        >
-                                            Edit
-                                        </button>
-                                        <button 
-                                            onClick={() => handleDelete(u.id)}
-                                            style={{ 
-                                                padding: '5px 10px',
-                                                cursor: 'pointer',
-                                                backgroundColor: '#f44336',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '3px'
-                                            }}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {users && users.map((u) => (
+                            <tr key={u.id}>
+                                <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.id}</td>
+                                <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.username}</td>
+                                <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.email}</td>
+                                <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.role}</td>
+                                <td style={{ padding: '12px', border: '1px solid #ddd' }}>{u.phone_number}</td>
+                                <td style={{ padding: '12px', border: '1px solid #ddd' }}>
+                                    <button
+                                        onClick={() => handleGetDetails(u.id)}
+                                        style={{
+                                            marginRight: '5px',
+                                            padding: '5px 10px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#4CAF50',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '3px'
+                                        }}
+                                    >
+                                        Details
+                                    </button>
+                                    <button
+                                        onClick={() => handleEdit(u)}
+                                        style={{
+                                            marginRight: '5px',
+                                            padding: '5px 10px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#2196F3',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '3px'
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(u.id)}
+                                        style={{
+                                            padding: '5px 10px',
+                                            cursor: 'pointer',
+                                            backgroundColor: '#f44336',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '3px'
+                                        }}
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </table>
 
                     {selectedUser && (
-                        <div style={{ 
-                            marginTop: '20px', 
-                            padding: '15px', 
+                        <div style={{
+                            marginTop: '20px',
+                            padding: '15px',
                             border: '1px solid #ddd',
                             borderRadius: '5px',
                             backgroundColor: '#f9f9f9'
@@ -233,9 +233,9 @@ const HomePage: React.FC = () => {
                             <p><strong>Email:</strong> {selectedUser.email}</p>
                             <p><strong>Role:</strong> {selectedUser.role}</p>
                             <p><strong>Phone:</strong> {selectedUser.phone_number}</p>
-                            <button 
+                            <button
                                 onClick={() => setSelectedUser(null)}
-                                style={{ 
+                                style={{
                                     marginTop: '10px',
                                     padding: '5px 15px',
                                     cursor: 'pointer',
@@ -251,9 +251,9 @@ const HomePage: React.FC = () => {
                     )}
 
                     {editingUser && (
-                        <div style={{ 
-                            marginTop: '20px', 
-                            padding: '15px', 
+                        <div style={{
+                            marginTop: '20px',
+                            padding: '15px',
                             border: '1px solid #ddd',
                             borderRadius: '5px',
                             backgroundColor: '#f0f8ff'
@@ -261,7 +261,7 @@ const HomePage: React.FC = () => {
                             <h3>Edit User (ID: {editingUser.id})</h3>
                             <div style={{ marginBottom: '10px' }}>
                                 <label style={{ display: 'block', marginBottom: '5px' }}>Username:</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={formData.username}
                                     onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -270,7 +270,7 @@ const HomePage: React.FC = () => {
                             </div>
                             <div style={{ marginBottom: '10px' }}>
                                 <label style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
-                                <input 
+                                <input
                                     type="email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -279,25 +279,16 @@ const HomePage: React.FC = () => {
                             </div>
                             <div style={{ marginBottom: '10px' }}>
                                 <label style={{ display: 'block', marginBottom: '5px' }}>Role:</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={formData.role}
                                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                                     style={{ width: '100%', padding: '8px', borderRadius: '3px', border: '1px solid #ddd' }}
                                 />
                             </div>
-                            <div style={{ marginBottom: '10px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px' }}>Phone Number:</label>
-                                <input 
-                                    type="text"
-                                    value={formData.phone_number}
-                                    onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
-                                    style={{ width: '100%', padding: '8px', borderRadius: '3px', border: '1px solid #ddd' }}
-                                />
-                            </div>
-                            <button 
+                            <button
                                 onClick={handleUpdate}
-                                style={{ 
+                                style={{
                                     marginRight: '10px',
                                     padding: '8px 20px',
                                     cursor: 'pointer',
@@ -309,9 +300,9 @@ const HomePage: React.FC = () => {
                             >
                                 Save Changes
                             </button>
-                            <button 
+                            <button
                                 onClick={handleCancelEdit}
-                                style={{ 
+                                style={{
                                     padding: '8px 20px',
                                     cursor: 'pointer',
                                     backgroundColor: '#666',
