@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import AuthButton from "../component/AuthButton.tsx";
 import { useAuth } from "react-oidc-context";
 import { apiClient } from "../services/apiClient.ts";
@@ -13,7 +12,6 @@ const HomePage: React.FC = () => {
     const [editingUser, setEditingUser] = useState<User | null>(null);
     const [formData, setFormData] = useState({ username: '', email: '', role: '', phone_number: '' });
 
-    const navigate = useNavigate();
     const { isAuthenticated, user } = useAuth();
 
     const fetchUsers = async () => {
@@ -35,7 +33,30 @@ const HomePage: React.FC = () => {
     };
 
     useEffect(() => {
-        fetchUsers();
+        const initializeUser = async () => {
+            if (!isAuthenticated || !user) {
+                setLoading(false);
+                return;
+            }
+
+            const token = user.id_token;
+
+            // Create user on mount (backend validates if user exists)
+            const newUser = {
+                cognitoSub: user.profile.sub || '',
+                username: user.profile.name || user.profile.email?.split('@')[0] || 'User',
+                email: user.profile.email || '',
+                role: 'user',
+                phoneNumber: user.profile.phone_number || ''
+            };
+
+            await apiClient.post<User>("/users", newUser, token);
+
+            // Fetch all users after creation attempt
+            await fetchUsers();
+        };
+
+        initializeUser();
     }, [isAuthenticated, user]);
 
     const handleGetDetails = async (userId: number) => {
