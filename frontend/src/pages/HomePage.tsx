@@ -1,99 +1,69 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { authService } from '../services/AuthService';
-import { User } from '../types';
+import { useNavigate } from 'react-router-dom';
+import AuthButton from "../component/AuthButton.tsx";
+import { useAuth } from "react-oidc-context";
+import { apiClient } from "../services/apiClient.ts";
+import { User } from "../types";
 
 const HomePage: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
-  const isAuthenticated = authService.isAuthenticated();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+    const [users, setUsers] = useState<User[] | null>(null);
 
-  useEffect(() => {
-    const fetchUserInfo = async (): Promise<void> => {
-      if (!isAuthenticated) {
-        setLoading(false);
-        return;
-      }
+    const navigate = useNavigate();
+    const { isAuthenticated, user } = useAuth();
 
-      try {
-        const userData = await authService.getUserInfo();
-        setUser(userData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load user information');
-      } finally {
-        setLoading(false);
-      }
-    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (!isAuthenticated || !user) {
+                setLoading(false);
+                return;
+            }
 
-    fetchUserInfo();
-  }, [isAuthenticated]);
+            const token = user.id_token;
 
-  const handleLogout = (): void => {
-    authService.logout();
-    setUser(null);
-    navigate('/');
-  };
+            const response = await apiClient.getAll<User[]>("/users", token);
 
-  if (loading) {
+            if (!response.success) {
+                setError(response.error || "Failed to load users.");
+            } else {
+                setUsers(response.data || null);
+            }
+
+            setLoading(false);
+        };
+
+        fetchUsers();
+    }, [isAuthenticated, user]);
+
+    if (loading) {
+        return (
+            <div style={{ padding: '20px', textAlign: 'center' }}>
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
     return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <p>Loading...</p>
-      </div>
+        <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
+            <h1>Welcome to Serverless Application Deployment Demo</h1>
+
+            <AuthButton />
+
+            {error && (
+                <p style={{ color: 'red', marginTop: '20px' }}>
+                    Error: {error}
+                </p>
+            )}
+
+            {users && (
+                <div style={{ marginTop: '20px' }}>
+                    <h2>Users from API:</h2>
+                    <pre>{JSON.stringify(users, null, 2)}</pre>
+                </div>
+            )}
+        </div>
     );
-  }
-
-  return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>Welcome to Serverless Application Deployment Demo</h1>
-
-      {!isAuthenticated ? (
-        <div>
-          <p>Please log in or register to access the application.</p>
-          <nav style={{ marginTop: '20px' }}>
-            <Link to="/login" style={{ marginRight: '15px' }}>
-              Login
-            </Link>
-            <Link to="/register">Register</Link>
-          </nav>
-        </div>
-      ) : (
-        <div>
-          {error ? (
-            <div style={{ color: 'red', marginBottom: '20px' }}>
-              <p>Error: {error}</p>
-            </div>
-          ) : user ? (
-            <div style={{ marginTop: '20px' }}>
-              <h2>User Information</h2>
-              <div style={{ backgroundColor: '#f5f5f5', padding: '15px', borderRadius: '5px' }}>
-                <p><strong>Username:</strong> {user.username}</p>
-                <p><strong>Email:</strong> {user.email}</p>
-                <p><strong>User ID:</strong> {user.id}</p>
-                <p><strong>Cognito ID:</strong> {user.cognitoId}</p>
-                <p><strong>Created:</strong> {new Date(user.createdAt).toLocaleString()}</p>
-              </div>
-            </div>
-          ) : null}
-          <button
-            onClick={handleLogout}
-            style={{
-              marginTop: '20px',
-              padding: '10px 20px',
-              backgroundColor: '#dc3545',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-            }}
-          >
-            Logout
-          </button>
-        </div>
-      )}
-    </div>
-  );
 };
 
 export default HomePage;

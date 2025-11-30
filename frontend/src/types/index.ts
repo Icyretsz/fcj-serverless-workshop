@@ -1,10 +1,10 @@
 export interface User {
   id: number;
-  cognitoId: string;
+  cognito_sub: string;
   username: string;
   email: string;
-  createdAt: Date;
-  updatedAt: Date;
+  role: string;
+  phone_number: string;
 }
 
 export interface AuthTokens {
@@ -12,6 +12,7 @@ export interface AuthTokens {
   idToken: string;
   refreshToken: string;
   expiresIn: number;
+  tokenType: string
 }
 
 export interface ApiResponse<T> {
@@ -43,6 +44,14 @@ export interface LoginResponse {
   expiresIn: number;
 }
 
-export interface GetUserInfoResponse {
-  user: User;
+export interface DeleteResponse {
+    message: string;
+    user: User;
 }
+
+export interface GetUserInfoResponse extends ApiResponse<User> {}
+export interface GetAllUsersInfoResponse extends ApiResponse<User[]> {}
+export interface UpdateUserInfoResponse extends ApiResponse<User> {}
+export interface DeleteUserResponse extends ApiResponse<DeleteResponse> {}
+export interface CreateUserResponse extends ApiResponse<User> {}
+
